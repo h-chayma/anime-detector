@@ -1,0 +1,76 @@
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row justify-content-center" *ngIf="searchResult">
+            <div class="col-md-5 order-md-2" #bigCard>
+                <div class="card">
+                    <div class="card-body">
+                        <video #videoPlayer width="100%" height="auto" controls autoplay loop playsinline>
+                            <source [src]="searchResult[0].video" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                        <p class="card-text mt-2">{{ formatTime(selectedResult.from) }} - {{
+                            formatTime(selectedResult.to) }}</p>
+                        <hr>
+                        <p class="card-title">{{ selectedResult.anilist.title.english }} <br> {{
+                            selectedResult.anilist.title.native }}</p>
+                        <hr>
+                        <p class="card-text">{{ selectedResult.anilist.synonyms.join(', ') }}</p>
+                        <hr>
+                        <div class="row g-0" *ngIf="animeDetails">
+                            <div class="col-md-6 col-12">
+                                <img [src]="animeDetails.images.jpg.image_url" class="img-fluid" alt="Anime Image" />
+                            </div>
+                            <div class="col-md-6 col-12 animedetails">
+                                <h5 class="card-text">
+                                    {{ animeDetails.title_english ? animeDetails.title_english : animeDetails.title }}
+                                </h5>
+                                <p class="card-text">Year: {{ animeDetails.year }}</p>
+                                <p class="card-text">Status: {{ animeDetails.status }}</p>
+                                <p class="card-text">Episodes: {{ animeDetails.episodes }}</p>
+                                <p class="card-text">Type: {{ animeDetails.type }}</p>
+                                <p class="card-text">Season: {{ animeDetails.season }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 order-md-1">
+                <div class="card" style="max-width: 500px;">
+                    <div class="row g-0">
+                        <div class="col-sm-5">
+                            <img [src]="uploadedImageUrl" alt="Uploaded Image" class="img-fluid" />
+                        </div>
+                        <div class="col-sm-7">
+                            <div class="card-body">
+                                <p class="card-text">Your search image</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card resultcards" style="max-width: 500px;" *ngFor="let result of searchResult"
+                    (click)="selectResult(result); scrollToBigCard()">
+                    <div class="card-header card-title">{{ result.anilist.title.english }}</div>
+                    <div class="row g-0">
+                        <div class="col-sm-5">
+                            <video class="card-img-top h-100" width="100%" height="auto">
+                                <source [src]="result.video" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                        <div class="col-sm-7">
+                            <div class="card-body">
+                                <h5 class="card-text" style="color: #ff5252;">Episode {{ result.episode }}</h5>
+                                <p class="card-text" style="color: #00b300;">{{ formatTime(result.from) }} - {{
+                                    formatTime(result.to) }}</p>
+                                <p class="card-text">~{{ (result.similarity * 100).toFixed(2) }}% Similarity</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="!searchResult">
+            <p>Loading...</p>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,20 @@
+.content-body {
+    margin-left: 0px;
+}
+
+.card {
+    height: unset;
+}
+
+.card-title {
+    color: #335fff;
+}
+
+.resultcards {
+    cursor: pointer;
+}
+
+.animedetails{
+    padding-left: 5%;
+    padding-top: 5%;
+}
