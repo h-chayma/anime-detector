@@ -9,6 +9,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { HeaderComponent } from './shared/header/header.component';
 import { FooterComponent } from './shared/footer/footer.component';
+import { NgxGoogleAnalyticsModule, NgxGoogleAnalyticsRouterModule } from 'ngx-google-analytics';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,9 @@ import { FooterComponent } from './shared/footer/footer.component';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    NgxGoogleAnalyticsModule.forRoot('G-WNYSENF26V'),
+    NgxGoogleAnalyticsRouterModule
   ],
   providers: [],
   bootstrap: [AppComponent]
