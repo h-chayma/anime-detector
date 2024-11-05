@@ -1,62 +1,38 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SearchService {
-  private apiUrl = 'https://api.trace.moe/search';
-  private apiAnimeUrl = 'https://api.jikan.moe/v4';
+  private readonly MAX_WIDTH = 800;
+  private readonly MAX_HEIGHT = 600;
+  private readonly apiUrl = 'https://api.trace.moe/search';
+  private readonly apiAnimeUrl = 'https://api.jikan.moe/v4';
   private searchResult: any;
 
   constructor(private http: HttpClient) { }
 
   searchImageAndResize(file: File): Observable<any> {
-    const canvas = document.createElement('canvas');
-    const context = canvas.getContext('2d');
-
-    const MAX_WIDTH = 800; 
-    const MAX_HEIGHT = 600;
-
-    const image = new Image();
     const reader = new FileReader();
 
     return new Observable<any>(observer => {
       reader.onload = (event: any) => {
+        const image = new Image();
         image.onload = () => {
-          let width = image.width;
-          let height = image.height;
-
-          if (width > height) {
-            if (width > MAX_WIDTH) {
-              height *= MAX_WIDTH / width;
-              width = MAX_WIDTH;
-            }
-          } else {
-            if (height > MAX_HEIGHT) {
-              width *= MAX_HEIGHT / height;
-              height = MAX_HEIGHT;
-            }
-          }
-
-          canvas.width = width;
-          canvas.height = height;
-
-          context?.drawImage(image, 0, 0, width, height);
-          canvas.toBlob(blob => {
-            if (blob) {
+          this.resizeImage(image, this.MAX_WIDTH, this.MAX_HEIGHT).subscribe({
+            next: (resizedBlob) => {
               const formData = new FormData();
-              formData.append('image', blob, file.name);
-                            this.searchImage(formData).subscribe(
+              formData.append('image', resizedBlob, file.name);
+              this.searchImage(formData).subscribe(
                 result => observer.next(result),
                 error => observer.error(error),
                 () => observer.complete()
               );
-            } else {
-              observer.error('Error resizing image');
-            }
-          }, 'image/jpeg'); 
+            },
+            error: error => observer.error(error)
+          });
         };
         image.src = event.target.result;
       };
@@ -64,20 +40,51 @@ export class SearchService {
     });
   }
 
+  private resizeImage(image: HTMLImageElement, maxWidth: number, maxHeight: number): Observable<Blob> {
+    return new Observable(observer => {
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
+      let { width, height } = image;
+
+      if (width > height && width > maxWidth) {
+        height *= maxWidth / width;
+        width = maxWidth;
+      } else if (height > maxHeight) {
+        width *= maxHeight / height;
+        height = maxHeight;
+      }
+
+      canvas.width = width;
+      canvas.height = height;
+      context?.drawImage(image, 0, 0, width, height);
+
+      canvas.toBlob(blob => {
+        if (blob) observer.next(blob);
+        else observer.error('Error resizing image');
+        observer.complete();
+      }, 'image/jpeg');
+    });
+  }
+
   searchImage(formData: FormData): Observable<any> {
     const url = `${this.apiUrl}?cutBorders&anilistInfo`;
-    return this.http.post(url, formData);
+    return this.http.post(url, formData).pipe(
+      catchError((error) => {
+        console.error('Error in searchImage API call:', error);
+        return throwError('Error during image search. Please try again later.');
+      })
+    );
   }
 
   getAnime(animeId: string): Observable<any> {
-    return this.http.get<any>(this.apiAnimeUrl + "/anime/" + animeId);
+    return this.http.get<any>(`${this.apiAnimeUrl}/anime/${animeId}`);
   }
 
-  setSearchResult(result: any) {
+  setSearchResult(result: any): void {
     this.searchResult = result;
   }
 
-  getSearchResult() {
+  getSearchResult(): any {
     return this.searchResult;
   }
 }

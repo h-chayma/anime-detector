@@ -10,11 +10,18 @@
                         <div class="basic-form">
                             <form enctype="multipart/form-data" (change)="onFileChange($event)" #fileForm>
                                 <div class="input-group mb-3">
-                                    <input class="form-control" type="file" required>
+                                    <input class="form-control" id="file-input" type="file" required
+                                        accept=".jpg,.jpeg,.png,.gif" aria-describedby="file-help-text">
+                                </div>
+                                <div id="file-help-text" class="form-text">
+                                    Please upload a valid image file (PNG, JPG, JPEG, GIF).
                                 </div>
                             </form>
                             <div *ngIf="loading" class="spinner-border text-primary" role="status">
                                 <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+                                {{ errorMessage }}
                             </div>
                         </div>
                     </div>

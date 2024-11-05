@@ -1,3 +1,6 @@
-.footer {
-    padding-left: 0;
+.footer.out-footer {
+    padding: 1em 0;
+    position: sticky;
+    bottom: 0;
+    width: 100%;
 }
