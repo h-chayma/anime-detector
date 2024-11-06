@@ -1,73 +1,94 @@
 <div class="content-body">
     <div class="container-fluid">
         <div class="row justify-content-center" *ngIf="searchResult">
-            <div class="col-md-5 order-md-2" #bigCard>
-                <div class="card">
+            <section class="col-lg-5 col-md-8 col-12 order-lg-2 order-md-2 order-1" #bigCard>
+                <article class="card">
                     <div class="card-body">
-                        <video #videoPlayer width="100%" height="auto" controls autoplay loop playsinline>
-                            <source [src]="searchResult[0].video" type="video/mp4">
-                            Your browser does not support the video tag.
+                        <video *ngIf="searchResult?.[0]?.video; else noVideo" #videoPlayer class="img-fluid w-100"
+                            controls autoplay loop playsinline aria-label="Main Anime Video">
+                            <source [src]="searchResult[0].video" type="video/mp4" />
                         </video>
-                        <p class="card-text mt-2">{{ formatTime(selectedResult.from) }} - {{
-                            formatTime(selectedResult.to) }}</p>
-                        <hr>
-                        <p class="card-title">{{ selectedResult.anilist.title.english }} <br> {{
-                            selectedResult.anilist.title.native }}</p>
-                        <hr>
-                        <p class="card-text">{{ selectedResult.anilist.synonyms.join(', ') }}</p>
-                        <hr>
+                        <ng-template #noVideo>
+                            <p>Video not available</p>
+                        </ng-template>
+
+                        <p class="card-text mt-2">
+                            {{ selectedResult?.from ? formatTime(selectedResult.from) : 'N/A' }} -
+                            {{ selectedResult?.to ? formatTime(selectedResult.to) : 'N/A' }}
+                        </p>
+                        <hr />
+
+                        <h5 class="card-title">
+                            {{ selectedResult?.anilist?.title?.english || 'Title Not Available' }} <br />
+                            {{ selectedResult?.anilist?.title?.native || '' }}
+                        </h5>
+                        <hr />
+
+                        <p class="card-text">
+                            {{ selectedResult?.anilist?.synonyms?.length ? selectedResult.anilist.synonyms.join(', ') :
+                            'No Synonyms Available' }}
+                        </p>
+                        <hr />
+
                         <div class="row g-0" *ngIf="animeDetails">
-                            <div class="col-md-6 col-12">
-                                <img [src]="animeDetails.images.jpg.image_url" class="img-fluid" alt="Anime Image" />
-                            </div>
+                            <figure class="col-md-6 col-12">
+                                <img *ngIf="animeDetails.images?.jpg?.image_url; else noImage"
+                                    [src]="animeDetails.images.jpg.image_url" class="img-fluid" alt="Anime Image" />
+                                <ng-template #noImage>
+                                    <p>Image Not Available</p>
+                                </ng-template>
+                            </figure>
                             <div class="col-md-6 col-12 animedetails">
-                                <h5 class="card-text">
-                                    {{ animeDetails.title_english ? animeDetails.title_english : animeDetails.title }}
-                                </h5>
-                                <p class="card-text">Year: {{ animeDetails.year }}</p>
-                                <p class="card-text">Status: {{ animeDetails.status }}</p>
-                                <p class="card-text">Episodes: {{ animeDetails.episodes }}</p>
-                                <p class="card-text">Type: {{ animeDetails.type }}</p>
-                                <p class="card-text">Season: {{ animeDetails.season }}</p>
+                                <h5 class="card-text">{{ animeDetails?.title_english || animeDetails?.title || 'Title
+                                    Not Available' }}</h5>
+                                <p class="card-text">Year: {{ animeDetails?.year || 'Unknown' }}</p>
+                                <p class="card-text">Status: {{ animeDetails?.status || 'Unknown' }}</p>
+                                <p class="card-text">Episodes: {{ animeDetails?.episodes || 'Unknown' }}</p>
+                                <p class="card-text">Type: {{ animeDetails?.type || 'Unknown' }}</p>
+                                <p class="card-text">Season: {{ animeDetails?.season || 'Unknown' }}</p>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-3 order-md-1">
-                <div class="card" style="max-width: 500px;">
+                </article>
+            </section>
+            <aside class="col-lg-3 col-md-4 col-12 order-lg-1 order-md-1 order-2">
+                <article class="card mb-3" style="max-width: 500px;">
                     <div class="row g-0">
-                        <div class="col-sm-5">
+                        <figure class="col-sm-5 p-4">
                             <img [src]="uploadedImageUrl" alt="Uploaded Image" class="img-fluid" />
-                        </div>
+                        </figure>
                         <div class="col-sm-7">
                             <div class="card-body">
                                 <p class="card-text">Your search image</p>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="card resultcards" style="max-width: 500px;" *ngFor="let result of searchResult"
-                    (click)="selectResult(result); scrollToBigCard()">
-                    <div class="card-header card-title">{{ result.anilist.title.english }}</div>
-                    <div class="row g-0">
-                        <div class="col-sm-5">
-                            <video class="card-img-top h-100" width="100%" height="auto">
-                                <source [src]="result.video" type="video/mp4">
-                                Your browser does not support the video tag.
-                            </video>
-                        </div>
-                        <div class="col-sm-7">
-                            <div class="card-body">
-                                <h5 class="card-text" style="color: #ff5252;">Episode {{ result.episode }}</h5>
-                                <p class="card-text" style="color: #00b300;">{{ formatTime(result.from) }} - {{
-                                    formatTime(result.to) }}</p>
-                                <p class="card-text">~{{ (result.similarity * 100).toFixed(2) }}% Similarity</p>
+                </article>
+                <div class="result-grid">
+                    <article *ngFor="let result of searchResult" (click)="selectResult(result); scrollToBigCard()"
+                        class="card resultcards mb-2" role="button" aria-label="Search Result Card"
+                        [class.selected]="result === selectedResult">
+                        <div class="card-header card-title">{{ result.anilist?.title?.english|| 'Unknown' }}</div>
+                        <div class="row g-0">
+                            <div class="col-sm-5">
+                                <video class="card-img-top h-100 w-100" muted>
+                                    <source [src]="result.video" type="video/mp4" />
+                                    <p>Video not available</p>
+                                </video>
+                            </div>
+                            <div class="col-sm-7">
+                                <div class="card-body">
+                                    <h5 class="card-text episode-text">Episode {{ result.episode }}</h5>
+                                    <p class="card-text time-text">{{ formatTime(result.from) }} - {{
+                                        formatTime(result.to) }}</p>
+                                    <p class="card-text similarity-text">~{{ (result.similarity * 100).toFixed(2) }}%
+                                        Similarity</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </article>
                 </div>
-            </div>
+            </aside>
         </div>
         <div *ngIf="!searchResult">
             <p>Loading...</p>

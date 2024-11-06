@@ -6,15 +6,48 @@
     height: unset;
 }
 
+.card-header {
+    padding: 1rem;
+}
+
 .card-title {
-    color: #335fff;
+    color: #f38950;
+}
+
+.result-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
 }
 
 .resultcards {
     cursor: pointer;
+    transition: background-color 0.3s;
 }
 
-.animedetails{
-    padding-left: 5%;
-    padding-top: 5%;
+.resultcards:hover {
+    background-color: #f9f9f9;
+}
+
+.resultcards.selected {
+    border: 2px solid #ffa677;
+}
+
+.animedetails {
+    padding-left: 10px;
+    padding-top: 10px;
+}
+
+.episode-text {
+    color: #ff5252;
+    margin-bottom: 0.25rem;
+}
+
+.time-text {
+    color: #00b300;
+    margin-bottom: 0.25rem;
+}
+
+.similarity-text {
+    font-weight: bold;
 }

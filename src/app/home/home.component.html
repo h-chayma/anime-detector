@@ -8,18 +8,18 @@
                     </div>
                     <div class="card-body">
                         <div class="basic-form">
-                            <form enctype="multipart/form-data" (change)="onFileChange($event)" #fileForm>
-                                <div class="input-group mb-3">
-                                    <input class="form-control" id="file-input" type="file" required
-                                        accept=".jpg,.jpeg,.png,.gif" aria-describedby="file-help-text">
+                            <form #fileForm>
+                                <div class="input-group mb-3 drop-zone" (dragover)="onDragOver($event)"
+                                    (dragleave)="onDragLeave($event)" (drop)="onDrop($event)"
+                                    (click)="fileInput.click()">
+                                    <input #fileInput type="file" id="file-input" required accept=".jpg,.jpeg,.png,.gif"
+                                        (change)="onFileChange($event)" aria-describedby="file-help-text" hidden />
+                                    <p>Drag & drop your image here or click to select a file.</p>
                                 </div>
                                 <div id="file-help-text" class="form-text">
                                     Please upload a valid image file (PNG, JPG, JPEG, GIF).
                                 </div>
                             </form>
-                            <div *ngIf="loading" class="spinner-border text-primary" role="status">
-                                <span class="visually-hidden">Loading...</span>
-                            </div>
                             <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
                                 {{ errorMessage }}
                             </div>
@@ -29,4 +29,9 @@
             </div>
         </div>
     </div>
+</div>
+
+<div *ngIf="loading" class="full-page-overlay">
+    <img src="assets/img/loading.gif" alt="Loading..." class="loading-gif" />
+    <p class="loading-text">Loading, please wait...</p>
 </div>
