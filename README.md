@@ -61,4 +61,4 @@ Contributions are welcome! If you’d like to contribute to Anime Detector, plea
 
 ## License
 
-This project is licensed under the [MIT License](../LICENSE). You are free to use, modify, and distribute this software in accordance with the license.
+This project is licensed under the [MIT License](LICENSE). You are free to use, modify, and distribute this software in accordance with the license.
