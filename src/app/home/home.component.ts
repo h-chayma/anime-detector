@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { SearchService } from '../service/search.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import { Meta, Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-home',
@@ -13,7 +14,17 @@ export class HomeComponent {
   loading: boolean = false;
   errorMessage: string | null = null;
 
-  constructor(private searchService: SearchService, private router: Router) { }
+  constructor(private searchService: SearchService, private router: Router, private meta: Meta, private title: Title) { }
+
+  ngOnInit() {
+    this.title.setTitle('Anime Detector - Discover Anime Scenes from Screenshots');
+    this.meta.addTags([
+      { name: 'description', content: 'Use Anime Detector to find anime scenes from any screenshot.' },
+      { property: 'og:title', content: 'Anime Detector - Home' },
+      { property: 'og:description', content: 'Discover anime scenes with Anime Detector.' },
+      { property: 'og:image', content: 'https://res.cloudinary.com/chayma-farhat/image/upload/v1730919829/og_img_j0u6fs.png' }
+    ]);
+  }
 
   onFileChange(event: any) {
     this.errorMessage = null;

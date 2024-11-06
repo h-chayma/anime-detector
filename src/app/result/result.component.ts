@@ -38,7 +38,6 @@ export class ResultComponent implements OnInit {
     this.uploadedImageUrl = this.searchService.getUploadedImageUrl();
   }
 
-
   formatTime(seconds: number): string {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
