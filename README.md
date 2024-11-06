@@ -1,11 +1,11 @@
 # Anime Detector
 
-Welcome to **Anime Detector**! This web application allows anime fans to trace back scenes from their favorite anime using screenshots through the **Trace.moe API**. It's perfect for anyone wanting to discover more about specific anime moments easily.
+Welcome to **Anime Detector**! This online tool helps anime fans discover scenes from their favorite anime through screenshots using the Trace.moe API. Access it directly:
 
 ----
 
 <p align="center">
-  <a href="https://animedetector.netlify.app/"><strong>Demo</strong></a>
+  <a href="https://animedetector.netlify.app/"><strong>Use Anime Detector</strong></a>
 </p>
 
 ![Screenshot of Anime Detector](src/assets/img/screenshoot.png)
@@ -18,33 +18,11 @@ Welcome to **Anime Detector**! This web application allows anime fans to trace b
 
 ----
 
-## Quick Start
+## How to Use
 
-Follow these steps to set up Anime Detector locally:
-
-1. **Clone the Repository**:
-   ```bash
-   git clone https://github.com/h-chayma/anime-detector.git
-   cd anime-detector
-   ```
-
-2. **Install Dependencies**:
-   ```bash
-   npm install
-   ```
-
-3. **Start the Application**:
-   ```bash
-   ng serve
-   ```
-
-   This will start the application on `http://localhost:4200`.
-
-----
-
-## Usage
-
-To use the Anime Detector, simply upload an anime screenshot and hit the search button. The app will process the image and return relevant scene details, including the title, episode, and more.
+1. **Visit** the site at animedetector.netlify.app.
+2. **Upload an Image:** Choose an anime screenshot.
+3. **Search:** Once the image uploaded successfully, Anime Detector will display scene details!
 
 ----
 
