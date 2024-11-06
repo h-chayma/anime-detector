@@ -1,4 +1,3 @@
-
 # Anime Detector
 
 Welcome to **Anime Detector**! This web application allows anime fans to trace back scenes from their favorite anime using screenshots through the **Trace.moe API**. It's perfect for anyone wanting to discover more about specific anime moments easily.
@@ -9,7 +8,7 @@ Welcome to **Anime Detector**! This web application allows anime fans to trace b
   <a href="https://animedetector.netlify.app/"><strong>Demo</strong></a>
 </p>
 
-![Screenshot of Anime Detector](src/assets/screenshots/home.png)
+![Screenshot of Anime Detector](src/assets/img/screenshoot.png)
 
 ## Features
 

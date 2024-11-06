@@ -6,21 +6,22 @@ import { Component } from '@angular/core';
   styleUrl: './header.component.css'
 })
 export class HeaderComponent {
-  logoSrc: string = 'assets/img/logo.png'; // Default logo for light mode
+  logoSrc: string = 'assets/img/logo.png';
 
   constructor() {
     this.updateLogo();
   }
+
   ngOnInit() {
-    this.updateLogo(); // Initial check on component load
+    this.updateLogo();
   }
 
   updateLogo() {
     const theme = document.documentElement.getAttribute('data-theme-version');
     if (theme === 'dark') {
-      this.logoSrc = 'assets/img/logo-dark.png'; // Logo for dark mode
+      this.logoSrc = 'assets/img/logo-dark.png';
     } else {
-      this.logoSrc = 'assets/img/logo.png'; // Default logo for light mode
+      this.logoSrc = 'assets/img/logo.png';
     }
   }
 }

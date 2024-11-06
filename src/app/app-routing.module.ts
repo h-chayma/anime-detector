@@ -5,8 +5,8 @@ import { ResultComponent } from './result/result.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
-  { path: 'result/:imageUrl', component: ResultComponent },
-  { path: '**', redirectTo: '' } 
+  { path: 'result', component: ResultComponent },
+  { path: '**', redirectTo: '' }
 ];
 
 @NgModule({

@@ -31,14 +31,13 @@ export class ResultComponent implements OnInit {
       this.router.navigate(['/']);
       return;
     }
-    this.searchResult = searchData ? searchData.result : [];
-    console.log("result:", this.searchResult);
+    this.searchResult = searchData.result;
+    console.log(this.searchResult);
     this.selectedResult = this.searchResult[0];
     this.getAnimeDetails(this.selectedResult.anilist.idMal);
-    this.route.params.subscribe(params => {
-      this.uploadedImageUrl = params['imageUrl'];
-    });
+    this.uploadedImageUrl = this.searchService.getUploadedImageUrl();
   }
+
 
   formatTime(seconds: number): string {
     const hours = Math.floor(seconds / 3600);

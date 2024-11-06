@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { SearchService } from '../service/search.service';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-home',
@@ -23,26 +24,31 @@ export class HomeComponent {
       const file: File = fileList[0];
       this.handleFile(file);
     } else {
-      this.errorMessage = 'No file selected. Please choose an image file to upload.';
+      Swal.fire({
+        icon: 'error',
+        title: 'No File Selected',
+        text: 'Please choose an image file to upload.',
+        confirmButtonText: 'OK',
+      });
     }
   }
 
   onDragOver(event: DragEvent) {
-    event.preventDefault(); // Prevent default to allow drop
-    event.dataTransfer!.dropEffect = 'copy'; // Indicate copy action
+    event.preventDefault();
+    event.dataTransfer!.dropEffect = 'copy';
     const dropZone = event.currentTarget as HTMLElement;
-    dropZone.classList.add('dragging'); // Add class to style drop zone
+    dropZone.classList.add('dragging');
   }
 
   onDragLeave(event: DragEvent) {
     const dropZone = event.currentTarget as HTMLElement;
-    dropZone.classList.remove('dragging'); // Remove class when drag leaves
+    dropZone.classList.remove('dragging');
   }
 
   onDrop(event: DragEvent) {
-    event.preventDefault(); // Prevent default behavior
+    event.preventDefault();
     const dropZone = event.currentTarget as HTMLElement;
-    dropZone.classList.remove('dragging'); // Remove dragging class
+    dropZone.classList.remove('dragging');
 
     const files = event.dataTransfer?.files;
     if (files && files.length > 0) {
@@ -52,24 +58,40 @@ export class HomeComponent {
   }
 
   private handleFile(file: File) {
-    const formData = new FormData();
-    formData.append('image', file, file.name);
-    const imageUrl = URL.createObjectURL(file);
     this.loading = true;
 
-    this.searchService.searchImageAndResize(file).subscribe((result) => {
-      this.searchService.setSearchResult(result);
-      this.router.navigate(['/result', imageUrl]);
-    }, (error) => {
-      console.error('Error during search:', error);
-    },
+    const allowedFormats = ['image/png', 'image/jpeg', 'image/gif', 'image/webp'];
+
+    if (!allowedFormats.includes(file.type)) {
+      this.loading = false;
+      Swal.fire({
+        icon: 'error',
+        title: 'Invalid file format',
+        text: 'Please upload an image file (PNG, JPG, JPEG, GIF).',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
+
+    const imageUrl = URL.createObjectURL(file);
+    this.searchService.setUploadedImageUrl(imageUrl);
+    this.searchService.searchImageAndResize(file).subscribe(
+      (result) => {
+        this.searchService.setSearchResult(result);
+        this.router.navigate(['/result']);
+      },
+      (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error Processing Image',
+          text: 'Please try again.',
+          confirmButtonText: 'OK',
+        });
+
+      },
       () => {
         this.loading = false;
-      });
-
-    const fileForm: HTMLFormElement | null = document.querySelector('#fileForm');
-    if (fileForm) {
-      fileForm.reset();
-    }
+      }
+    );
   }
 }
